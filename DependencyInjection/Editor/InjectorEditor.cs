@@ -1,10 +1,12 @@
-﻿using UnityEditor;
+﻿using Pampero.Tools.DependencyInjection;
+using UnityEditor;
 using UnityEngine;
 
-namespace Pampero.DependencyInjection 
+namespace Pampero.Tools.Editor.DependencyInjection 
 {
+#if UNITY_EDITOR
     [CustomEditor(typeof(Injector))]
-    public class InjectorEditor : Editor 
+    public class InjectorEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI() 
         {
@@ -24,5 +26,6 @@ namespace Pampero.DependencyInjection
             }
         }
     }
+#endif
 }
 //EOF.

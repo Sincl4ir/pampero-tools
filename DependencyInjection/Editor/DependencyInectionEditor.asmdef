@@ -1,0 +1,16 @@
+{
+    "name": "DependencyInectionEditor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9b4999abba5bffa46bc6d8e0bfd72819"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

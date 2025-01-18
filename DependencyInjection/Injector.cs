@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
-namespace Pampero.DependencyInjection 
+namespace Pampero.Tools.DependencyInjection 
 {
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Property)]
     public sealed class InjectAttribute : PropertyAttribute { }
@@ -21,7 +21,8 @@ namespace Pampero.DependencyInjection
         
         private readonly Dictionary<Type, object> _registry = new();
 
-        void Awake() {
+        protected void Awake() 
+        {
             var monoBehaviours = FindMonoBehaviours();
             
             // Find all modules implementing IDependencyProvider and register the dependencies they provide

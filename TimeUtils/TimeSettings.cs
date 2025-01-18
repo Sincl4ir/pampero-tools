@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Pampero.TimeSystem
 {
-    [CreateAssetMenu(fileName = "TimeSettings", menuName = "TimeSettings")]
+    [CreateAssetMenu(fileName = "TimeSettings", menuName = "Pampero/SO/TimeSettings")]
     public class TimeSettings : ScriptableObject
     {
         public float timeMultiplier = 2000;

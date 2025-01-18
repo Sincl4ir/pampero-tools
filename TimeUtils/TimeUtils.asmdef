@@ -1,0 +1,16 @@
+{
+    "name": "TimeUtils",
+    "rootNamespace": "",
+    "references": [
+        "GUID:5c5d4e2ced7d8fd418efa0879a7a1352"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
