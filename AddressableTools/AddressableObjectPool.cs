@@ -20,13 +20,13 @@ namespace Pampero.Tools.Pooling.Addressables {
 
         void Start()
         {
-            foreach (var poolableObject in _SpawnPropertyList) {
-                if (poolableObject == null) continue;
-                if (poolableObject.Prefab == null) continue;
-                if (poolableObject.Prefab.RuntimeKeyIsValid() == false) continue;
+            foreach (var poolableObject in _SpawnPropertyList) 
+            {
+                if (poolableObject == null) { continue; }
+                if (poolableObject.Prefab == null) { continue; }
+                if (poolableObject.Prefab.RuntimeKeyIsValid() == false) { continue; }
 
                 var key = poolableObject.Prefab.RuntimeKey.ToString();
-
                 var pool = TryCreatePool(key);
 
                 if (pool == null)
@@ -49,15 +49,15 @@ namespace Pampero.Tools.Pooling.Addressables {
 
         public AddressablesPool TryCreatePool(AssetReference asset)
         {
-            if (asset == null) return null;
-            if (asset.RuntimeKeyIsValid() == false) return null;
+            if (asset == null) { return null; }
+            if (asset.RuntimeKeyIsValid() == false) { return null; }
 
             return TryCreatePool(asset.RuntimeKey.ToString());
         }
 
         public AddressablesPool TryCreatePool(string key)
         {
-            if (objectPools.ContainsKey(key)) return null;
+            if (objectPools.ContainsKey(key)) { return null; }
             var pool = new AddressablesPool(key);
             objectPools.Add(key, pool);
 
@@ -68,15 +68,15 @@ namespace Pampero.Tools.Pooling.Addressables {
 
         public bool TryRemovePool(AssetReference asset)
         {
-            if (asset == null) return false;
-            if (asset.RuntimeKeyIsValid() == false) return false;
+            if (asset == null) { return false; }
+            if (asset.RuntimeKeyIsValid() == false) { return false; }
 
             return TryRemovePool(asset.RuntimeKey.ToString());
         }
 
         public bool TryRemovePool(string key)
         {
-            if(objectPools.ContainsKey(key) == false) return false;
+            if (objectPools.ContainsKey(key) == false) { return false; }
             var pool = objectPools[key];
             objectPools.Remove(key);
 
@@ -86,15 +86,15 @@ namespace Pampero.Tools.Pooling.Addressables {
 
         public async Task<PooledObjectOperation<GameObject>> TryGetGameObject(AssetReference asset)
         {
-            if(asset == null) return null;
-            if(asset.RuntimeKeyIsValid() == false) return null;
+            if (asset == null) { return null; }
+            if (asset.RuntimeKeyIsValid() == false) { return null; }
 
             return await TryGetGameObject(asset.RuntimeKey.ToString());
         }
 
         public async Task<PooledObjectOperation<GameObject>> TryGetGameObject(string key)
         {
-            if (objectPools.ContainsKey(key) == false) return null;
+            if (objectPools.ContainsKey(key) == false) { return null; }
             var pool = objectPools[key];
 
             while (pool.IsGenerating)
@@ -120,10 +120,9 @@ namespace Pampero.Tools.Pooling.Addressables {
 
         public void TryReturnGameObject(PooledObjectOperation<GameObject> go)
         {
-            if(go == null) return;
+            if (go == null) { return; }
             go.Dispose();
         }
-
     }
 }
 #endif
