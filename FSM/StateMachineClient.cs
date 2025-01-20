@@ -18,12 +18,12 @@ namespace Pampero.FSM
 
         protected virtual void Update()
         {
-            _stateMachine.Update();
+            _stateMachine?.Update();
         }
 
         protected virtual void FixedUpdate()
         {
-            _stateMachine.FixedUpdate();
+            _stateMachine?.FixedUpdate();
         }
 
         /// <summary>
@@ -34,11 +34,11 @@ namespace Pampero.FSM
         /// <summary>
         /// Adds a transition from one state to another state based on a condition predicate.
         /// </summary>
-        protected void At(IState from, IState to, IPredicate condition) => _stateMachine.AddTransition(from, to, condition);
+        protected void At(IState from, IState to, IPredicate condition) => _stateMachine?.AddTransition(from, to, condition);
         /// <summary>
         /// Adds a transition from any state to a specific state based on a condition predicate.
         /// </summary>
-        protected void Any(IState to, IPredicate condition) => _stateMachine.AddAnyTransition(to, condition);
+        protected void Any(IState to, IPredicate condition) => _stateMachine?.AddAnyTransition(to, condition);
         
         protected bool CanTransitionToState(IState state) => _stateMachine.CanTransitionToState(state);
         protected bool CanTransitionToState(Type stateType) => _stateMachine.CanTransitionToState(stateType);
@@ -47,7 +47,7 @@ namespace Pampero.FSM
         /// </summary>
         public bool IsInState(Type state)
         {
-            return _stateMachine.Current.State.GetType() == state;
+            return _stateMachine?.Current.State.GetType() == state;
         }
     }
 }
