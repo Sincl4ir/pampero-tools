@@ -1,14 +1,16 @@
 using UnityEngine;
 
-namespace Pampero.TimeSystem
+namespace Pampero.Tools.TimeUtils
 {
     [CreateAssetMenu(fileName = "TimeSettings", menuName = "Pampero/SO/TimeSettings")]
     public class TimeSettings : ScriptableObject
     {
-        public float timeMultiplier = 2000;
-        public float startHour = 12;
-        public float sunriseHour = 6;
-        public float sunsetHour = 18;
+        [field: SerializeField] public Season StartingSeason { get; private set; }
+        [field: SerializeField] public int DaysPerSeason { get; private set; }
+        [field: SerializeField] public float TimeMultiplier {get; private set;}
+        [field: SerializeField] public float StartHour { get; private set; }
+        [field: SerializeField] public float SunriseHour { get; private set; }
+        [field: SerializeField] public float SunsetHour { get; private set;}
     }
 }
 //EOF.
