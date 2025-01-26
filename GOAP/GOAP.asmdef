@@ -1,7 +1,10 @@
 {
-    "name": "Utils",
+    "name": "GOAP",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:4d00e81781b937c439ee6375003133d6",
+        "GUID:de6858961825fef489b6bf7c878014c3"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

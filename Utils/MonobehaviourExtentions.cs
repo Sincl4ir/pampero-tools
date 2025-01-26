@@ -5,50 +5,50 @@ namespace Pampero.Tools.Utils
 {
     public static class MonobehaviourExtentions
 	{
-		public static void GetComponentIfNull<T>(this MonoBehaviour a_MonoBehaviour, ref T a_Component) where T : Component
+		public static void GetComponentIfNull<T>(this MonoBehaviour monoBehaviour, ref T component) where T : Component
 		{
-			if (a_Component == null)
-			{
-				a_Component = a_MonoBehaviour.GetComponent<T>();
-			}
-		}
-
-		public static void GetComponentInChildrenIfNull<T>(this MonoBehaviour a_MonoBehaviour, ref T a_Component) where T : Component
-		{
-			GetComponentInChildrenIfNullRecursive<T>(a_MonoBehaviour.transform, ref a_Component);
-		}
-
-		public static void GetComponentInParentIfNull<T>(this MonoBehaviour a_MonoBehaviour, ref T a_Component) where T : Component
-		{
-			if (a_Component == null)
-			{
-				a_Component = a_MonoBehaviour.GetComponentInParent<T>();
-			}
-		}
-
-		private static void GetComponentInChildrenIfNullRecursive<T>(Transform a_Parent, ref T a_Component) where T : Component
-		{
-			if (a_Component == null)
-			{
-				a_Component = a_Parent.GetComponent<T>();
-
-				if (a_Component == null)
-				{
-					//Still null, try its children
-					foreach (Transform child in a_Parent)
-					{
-						GetComponentInChildrenIfNullRecursive<T>(child, ref a_Component);
-					}
-				}
-			}
-		}
-
-		public static T GetOrAddComponent<T>(this MonoBehaviour a_MonoBehaviour) where T : Component
-		{
-			T component = a_MonoBehaviour.GetComponent<T>();
-
 			if (component == null)
-				component = a_MonoBehaviour.gameObject.AddComponent<T>();
+			{
+				monoBehaviour.TryGetComponent<T>(out component);
+			}
+		}
+
+		public static void GetComponentInChildrenIfNull<T>(this MonoBehaviour monoBehaviour, ref T component) where T : Component
+		{
+			GetComponentInChildrenIfNullRecursive<T>(monoBehaviour.transform, ref component);
+		}
+
+		public static void GetComponentInParentIfNull<T>(this MonoBehaviour monoBehaviour, ref T component) where T : Component
+		{
+			if (component == null)
+			{
+				component = monoBehaviour.GetComponentInParent<T>();
+			}
+		}
+
+		private static void GetComponentInChildrenIfNullRecursive<T>(Transform parent, ref T component) where T : Component
+		{
+			if (component != null) { return; } // Exit early if the component is already found.
+
+			if (parent.TryGetComponent(out T foundComponent))
+			{
+				component = foundComponent;
+				return; // Exit early if the component is found on the current transform.
+			}
+
+			foreach (Transform child in parent)
+			{
+				GetComponentInChildrenIfNullRecursive(child, ref component);
+				if (component != null) { return; }
+			}
+		}
+
+		public static T GetOrAddComponent<T>(this MonoBehaviour monoBehaviour) where T : Component
+		{
+			if (!monoBehaviour.TryGetComponent<T>(out T component))
+			{
+				component = monoBehaviour.gameObject.AddComponent<T>();
+			}
 
 			return component;
 		}
@@ -64,63 +64,64 @@ namespace Pampero.Tools.Utils
 			}
 		}
 
-		public static void RunNextFrame(this MonoBehaviour a_MonoBehaviour, System.Action a_Callback)
+		public static void RunNextFrame(this MonoBehaviour monoBehaviour, System.Action callback)
 		{
-			a_MonoBehaviour.StartCoroutine(Coroutine(a_Callback));
+			monoBehaviour.StartCoroutine(Coroutine(callback));
 
-			IEnumerator Coroutine(System.Action _Callback)
+			IEnumerator Coroutine(System.Action onComplete)
 			{
 				yield return null;
-				_Callback?.Invoke();
+				onComplete?.Invoke();
 			}
 		}
 
-		public static void RunAfterFrames(this MonoBehaviour a_MonoBehaviour, int a_DelayFrames, System.Action a_Callback)
+		public static void RunAfterFrames(this MonoBehaviour monoBehaviour, int delayFrames, System.Action callback)
 		{
-			a_MonoBehaviour.StartCoroutine(Coroutine(a_DelayFrames, a_Callback));
+			monoBehaviour.StartCoroutine(Coroutine(delayFrames, callback));
 
-			IEnumerator Coroutine(int _DelayFrames, System.Action _Callback)
+			IEnumerator Coroutine(int delay, System.Action onComplete)
 			{
-				for (int i = 0; i < _DelayFrames; i++)
+				for (int i = 0; i < delay; i++)
 				{
 					yield return null;
 				}
 
-				_Callback?.Invoke();
+				onComplete?.Invoke();
 			}
 		}
 
-		public static void RunAfterSeconds(this MonoBehaviour a_MonoBehaviour, float a_Seconds, System.Action a_Callback)
+		public static void RunAfterSeconds(this MonoBehaviour monoBehaviour, float seconds, System.Action callback)
 		{
-			a_MonoBehaviour.StartCoroutine(Coroutine(a_Seconds, a_Callback));
+			monoBehaviour.StartCoroutine(Coroutine(seconds, callback));
 
-			IEnumerator Coroutine(float _Seconds, System.Action _Callback)
+			IEnumerator Coroutine(float delay, System.Action onComplete)
 			{
-				yield return new WaitForSeconds(_Seconds);
-				_Callback?.Invoke();
+				yield return new WaitForSeconds(delay);
+				onComplete?.Invoke();
 			}
 		}
 
-		public static void RunAfterSecondsRealtime(this MonoBehaviour a_MonoBehaviour, float a_Seconds, System.Action a_Callback)
+		public static void RunAfterSecondsRealtime(this MonoBehaviour monoBehaviour, float seconds, System.Action callback)
 		{
-			a_MonoBehaviour.StartCoroutine(Coroutine(a_Seconds, a_Callback));
+			monoBehaviour.StartCoroutine(Coroutine(seconds, callback));
 
-			IEnumerator Coroutine(float _Seconds, System.Action _Callback)
+			IEnumerator Coroutine(float delay, System.Action onComplete)
 			{
-				yield return new WaitForSecondsRealtime(_Seconds);
-				_Callback?.Invoke();
+				yield return new WaitForSecondsRealtime(delay);
+				onComplete?.Invoke();
 			}
 		}
 
-		public static void RunWhenReady(this MonoBehaviour a_MonoBehaviour, System.Func<bool> a_Predicate, System.Action a_Callback)
+		public static void RunWhenReady(this MonoBehaviour monoBehaviour, System.Func<bool> predicate, System.Action callback)
 		{
-			a_MonoBehaviour.StartCoroutine(Coroutine(a_Predicate, a_Callback));
+			monoBehaviour.StartCoroutine(Coroutine(predicate, callback));
 
-			IEnumerator Coroutine(System.Func<bool> _Predicate, System.Action _Callback)
+			IEnumerator Coroutine(System.Func<bool> condition, System.Action onComplete)
 			{
-				yield return new WaitUntil(_Predicate);
-				_Callback?.Invoke();
+				yield return new WaitUntil(condition);
+				onComplete?.Invoke();
 			}
 		}
 	}
 }
+//EOF.

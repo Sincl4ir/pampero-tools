@@ -8,7 +8,7 @@
         /// <summary>
         /// Executes the strategy.
         /// </summary>
-        public void Execute();
+        public void Execute(out bool success);
 
         /// <summary>
         /// Checks if the strategy can be executed.
@@ -20,7 +20,7 @@
         /// Attempts to execute the strategy.
         /// </summary>
         /// <returns>True if the strategy was executed successfully; otherwise, false.</returns>
-        public bool TryToExecute();
+        public bool TryToExecute(out bool success);
     }
 }
 //EOF.

@@ -10,7 +10,7 @@
         /// Executes the strategy using the provided data.
         /// </summary>
         /// <param name="data">The data needed for the strategy execution.</param>
-        public void Execute(ref T data);
+        public void Execute(ref T data, out bool success);
 
         /// <summary>
         /// Checks if the strategy can be executed with the provided data.
@@ -24,7 +24,7 @@
         /// </summary>
         /// <param name="data">The data needed for the strategy execution.</param>
         /// <returns>True if the strategy was executed successfully; otherwise, false.</returns>
-        public bool TryToExecute(ref T data);
+        public bool TryToExecute(ref T data, out bool success);
     }
 }
 //EOF.

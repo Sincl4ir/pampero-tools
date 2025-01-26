@@ -11,11 +11,12 @@ namespace Pampero.Tools.Effects
         /// Attempts to execute the effect property.
         /// </summary>
         /// <returns>True if the effect property was executed successfully; otherwise, false.</returns>
-        public virtual bool TryToExecute()
+        public virtual bool TryToExecute(out bool success)
         {
+            success = false;
             if (CanExecute())
             {
-                Execute();
+                Execute(out success);
                 return true;
             }
 
@@ -31,7 +32,7 @@ namespace Pampero.Tools.Effects
         /// <summary>
         /// Executes the effect property.
         /// </summary>
-        public abstract void Execute();
+        public abstract void Execute(out bool success);
     }
 }
 //EOF.
