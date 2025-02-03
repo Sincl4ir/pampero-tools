@@ -3,17 +3,17 @@
 public class Node 
 {
     public Node Parent { get; }
-    public AgentAction Action { get; }
-    public HashSet<AgentBelief> RequiredEffects { get; }
+    public AgentActionSO Action { get; }
+    public HashSet<BaseAgentBeliefSO> RequiredEffects { get; }
     public List<Node> Leaves { get; }
     public float Cost { get; }
     
     public bool IsLeafDead => Leaves.Count == 0 && Action == null;
     
-    public Node(Node parent, AgentAction action, HashSet<AgentBelief> effects, float cost) {
+    public Node(Node parent, AgentActionSO action, HashSet<BaseAgentBeliefSO> effects, float cost) {
         Parent = parent;
         Action = action;
-        RequiredEffects = new HashSet<AgentBelief>(effects);
+        RequiredEffects = new HashSet<BaseAgentBeliefSO>(effects);
         Leaves = new List<Node>();
         Cost = cost;
     }

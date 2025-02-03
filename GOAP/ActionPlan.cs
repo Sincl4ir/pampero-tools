@@ -2,11 +2,11 @@
 
 public class ActionPlan 
 {
-    public AgentGoal AgentGoal { get; }
-    public Stack<AgentAction> Actions { get; }
+    public AgentGoalSO AgentGoal { get; }
+    public Stack<AgentActionSO> Actions { get; }
     public float TotalCost { get; set; }
     
-    public ActionPlan(AgentGoal goal, Stack<AgentAction> actions, float totalCost) 
+    public ActionPlan(AgentGoalSO goal, Stack<AgentActionSO> actions, float totalCost) 
     {
         AgentGoal = goal;
         Actions = actions;

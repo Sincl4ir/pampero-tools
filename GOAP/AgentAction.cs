@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-
 public class AgentAction 
 {
     public string Name { get; }
@@ -9,13 +8,14 @@ public class AgentAction
     public HashSet<AgentBelief> Effects { get; } = new();
     
     protected IActionStrategy _strategy;
-    public bool Complete => _strategy.Complete;
+    public bool Complete => _strategy.Completed;
     
     AgentAction(string name) 
     {
         Name = name;
     }
-    
+
+    public void Setup(GOAPAgentData data) => _strategy.Setup(data); 
     public void Start() => _strategy.Start();
 
     public void Update(float deltaTime) 
@@ -23,11 +23,11 @@ public class AgentAction
         // Check if the action can be performed and update the strategy
         if (_strategy.CanPerform) 
         {
-            _strategy.Update(deltaTime);
+            _strategy.UpdateStrategy(deltaTime);
         }
 
         // Bail out if the strategy is still executing
-        if (!_strategy.Complete) { return; }
+        if (!_strategy.Completed) { return; }
         
         // Apply effects
         foreach (var effect in Effects) 

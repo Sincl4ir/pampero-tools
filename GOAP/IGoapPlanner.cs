@@ -2,5 +2,5 @@
 
 public interface IGoapPlanner 
 {
-    ActionPlan Plan(BaseGoapAgent agent, HashSet<AgentGoal> goals, AgentGoal mostRecentGoal = null);
+    ActionPlan Plan(BaseGoapAgentSO agent, HashSet<AgentGoalSO> goals, AgentGoalSO mostRecentGoal = null);
 }

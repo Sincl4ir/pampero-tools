@@ -1,9 +1,7 @@
 {
-    "name": "GOAP",
+    "name": "IdSOEditor",
     "rootNamespace": "",
     "references": [
-        "GUID:4d00e81781b937c439ee6375003133d6",
-        "GUID:de6858961825fef489b6bf7c878014c3",
         "GUID:7aee2fd31d7a33b42b84bf210a307c78"
     ],
     "includePlatforms": [],

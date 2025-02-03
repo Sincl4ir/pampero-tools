@@ -4,33 +4,55 @@ using UnityEngine;
 
 public class GoapPlanner : IGoapPlanner 
 {
-    public ActionPlan Plan(BaseGoapAgent agent, HashSet<AgentGoal> goals, AgentGoal mostRecentGoal = null) 
+    public ActionPlan Plan(BaseGoapAgentSO agent, HashSet<AgentGoalSO> goals, AgentGoalSO mostRecentGoal = null)
     {
         // Order goals by priority, descending
-        List<AgentGoal> orderedGoals = goals
+        if (goals is null) 
+        {
+            Debug.Log("GOALS CAN NOT BE NULL");
+            return null; 
+        } 
+
+        List<AgentGoalSO> orderedGoals = goals
             .Where(g => g.DesiredEffects.Any(b => !b.Evaluate()))
             .OrderByDescending(g => g == mostRecentGoal ? g.Priority - 0.01 : g.Priority)
             .ToList();
+
+        Debug.Log("Ordered goals by priority: ");
+        for (int i = 0; i < orderedGoals.Count; i++)
+        {
+            Debug.Log($"{orderedGoals[i].Name} with priority {orderedGoals[i].Priority}");
+        }
         
         // Try to solve each goal in order
         foreach (var goal in orderedGoals) 
         {
+            Debug.Log($"Evaluating goal {goal.Name}");
             Node goalNode = new Node(null, null, goal.DesiredEffects, 0);
             
             // If we can find a path to the goal, return the plan
             if (FindPath(goalNode, agent.Actions)) 
             {
                 // If the goalNode has no leaves and no action to perform try a different goal
-                if (goalNode.IsLeafDead) { continue; }
+                if (goalNode.IsLeafDead) 
+                {
+                    Debug.Log("Leaf is dead...");
+                    continue; 
+                }
                 
-                Stack<AgentAction> actionStack = new Stack<AgentAction>();
+                Stack<AgentActionSO> actionStack = new Stack<AgentActionSO>();
                 while (goalNode.Leaves.Count > 0) 
                 {
                     var cheapestLeaf = goalNode.Leaves.OrderBy(leaf => leaf.Cost).First();
                     goalNode = cheapestLeaf;
                     actionStack.Push(cheapestLeaf.Action);
                 }
-                
+
+                Debug.Log($"Returning new action plan {goal.Name}, action stack count: {actionStack.Count}, cost: {goalNode.Cost}");
+                foreach(var action in actionStack)
+                {
+                    Debug.Log($"{action.Name}");
+                }
                 return new ActionPlan(goal, actionStack, goalNode.Cost);
             }
         }
@@ -40,13 +62,18 @@ public class GoapPlanner : IGoapPlanner
     }
 
     // TODO: Consider a more powerful search algorithm like A* or D*
-    private bool FindPath(Node parent, HashSet<AgentAction> actions) 
+    private bool FindPath(Node parent, HashSet<AgentActionSO> actions) 
     {
         // Order actions by cost, ascending
         var orderedActions = actions.OrderBy(a => a.Cost);
-        
+        if (parent.Action is not null)
+        {
+            Debug.Log($"Checking path for Action {parent.Action.Name}");
+        }
+        Debug.Log($"Trying to find Path. Ordered actions by cost. Ordered actions amount: {actions.OrderBy(a => a.Cost).ToList().Count}...");
         foreach (var action in orderedActions) 
         {
+            Debug.Log($"Checking action {action.Name}");
             var requiredEffects = parent.RequiredEffects;
             
             // Remove any effects that evaluate to true, there is no action to take
@@ -55,16 +82,17 @@ public class GoapPlanner : IGoapPlanner
             // If there are no required effects to fulfill, we have a plan
             if (requiredEffects.Count == 0) 
             {
+                Debug.Log("There are no required effect to fulfill");
                 return true;
             }
 
             if (action.Effects.Any(requiredEffects.Contains)) 
             {
-                var newRequiredEffects = new HashSet<AgentBelief>(requiredEffects);
+                var newRequiredEffects = new HashSet<BaseAgentBeliefSO>(requiredEffects);
                 newRequiredEffects.ExceptWith(action.Effects);
                 newRequiredEffects.UnionWith(action.Preconditions);
                 
-                var newAvailableActions = new HashSet<AgentAction>(actions);
+                var newAvailableActions = new HashSet<AgentActionSO>(actions);
                 newAvailableActions.Remove(action);
                 
                 var newNode = new Node(parent, action, newRequiredEffects, parent.Cost + action.Cost);

@@ -1,14 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-public class AgentBelief
+public class AgentBelief : IBelief
 {
     protected Func<bool> _condition = () => false;
-    protected Func<Vector3> _observedLocation = () => Vector3.zero;
+    //protected Func<Vector3> _observedLocation = () => Vector3.zero;
     
     public string Name { get; }
-    public Vector3 Location => _observedLocation();
-    
+    //public Vector3 Location => _observedLocation();
+
+    public void Setup(GOAPAgentData data) { }
     AgentBelief(string name) 
     {
         Name = name;
@@ -34,7 +35,7 @@ public class AgentBelief
         
         public Builder WithLocation(Func<Vector3> observedLocation) 
         {
-            belief._observedLocation = observedLocation;
+            //belief._observedLocation = observedLocation;
             return this;
         }
         
